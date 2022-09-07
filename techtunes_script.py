@@ -3,9 +3,9 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 
-total_pages = 100
+total_pages = 200
 
-for page_no in range (1,total_pages+1):
+for page_no in range (143,total_pages+1):
     titles = []
     categories = []
     views = []
@@ -22,7 +22,10 @@ for page_no in range (1,total_pages+1):
         detail_page = requests.get(link['href'])
         soup = BeautifulSoup(detail_page.content, "html.parser")
         
-        categories.append(soup.find('span',class_='mdb badge badge-default badge-pill z-depth-1').get_text())
+        try:
+            categories.append(soup.find('span',class_='mdb badge badge-default badge-pill z-depth-1').get_text())
+        except:
+            categories.append("Not Defined")
         view_text = soup.find('a',class_='mdb btn btn-outline-primary white btn-rounded waves-effect px-1 py-2 z-depth-1-half w-30').get_text()
         views.append(''.join(re.findall(r'\d+,*\d+', view_text)))
         contents.append(soup.find('div',class_='card-body px-3 px-sm-4 mb-3').get_text().strip())
